@@ -8,10 +8,12 @@ import helmet from "helmet";
 import { responseFormatter } from "./middlewares/default/responseFormater.js";
 import connectDB from "./config/db.js";
 
-// import your routes here from src/modules
-import todoRoutes from "./modules/todo/todo.routes.js";
+// import your routes here from src/modules 
 import userRoutes from "./modules/user/user.routes.js";
 import recipeRoutes from "./modules/recipe/recipe.routes.js";
+import authRoutes from "./modules/auth/auth.routes.js";
+import feedbackRoutes from "./modules/feedback/feedback.routes.js";
+
 import compression from "compression";
 
 const app = express();
@@ -28,9 +30,11 @@ connectDB();
 app.use(responseFormatter);
 
 // inject your routes here
-app.use("/api/v1/todo", todoRoutes);
+ 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/recipe", recipeRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/feedback", feedbackRoutes);
 
 
 app.use(notFound);

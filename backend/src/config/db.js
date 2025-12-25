@@ -38,10 +38,8 @@ const connectDB = async () => {
 
  
 const closeDB = () => {
-    mongoose.connection.close(() => {
-        console.log('Database connection disconnected through app termination.');
-        process.exit(0);
-    });
+    mongoose.connection.close();
+    console.log('⚠️ Mongoose default connection disconnected through app termination');
 };
 
 // Listen for termination signals (SIGINT, SIGTERM)

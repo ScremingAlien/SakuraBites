@@ -1,0 +1,196 @@
+🔐 AUTH / USER APIs
+/auth
+--------------------------------------------
+POST   /auth/signup
+POST   /auth/login
+POST   /auth/verify-otp
+POST   /auth/forgot-password
+POST   /auth/reset-password
+POST   /auth/logout
+GET    /auth/me
+
+
+📌 Notes:
+
+Signup → email OTP
+Username = string before @
+Login → email + OTP
+Triggers:  SYSTEM notification → Login alert (optional)
+
+-------------------------------------
+
+👤 USER APIs
+/users
+
+GET    /users/:username
+PATCH  /users/profile
+PATCH  /users/preferences
+GET    /users/favorites
+GET    /users/following
+POST   /users/:id/follow
+DELETE /users/:id/unfollow
+
+
+🔔 Notifications:
+
+USER_FOLLOWED
+NEW_RECIPE_FROM_FOLLOWING
+-------------------------------------
+
+❤️ FAVORITES
+
+
+POST   /recipes/:id/favorite
+DELETE /recipes/:id/favorite
+
+
+🔔 Notifications:
+
+RECIPE_FAVORITED
+FAVORITE_MILESTONE
+
+--------------------------------------
+🧂 INGREDIENT APIs
+/ingredients
+
+GET    /ingredients
+GET    /ingredients/:slug
+GET    /ingredients/:slug/recipes
+POST   /ingredients        (admin)
+ 
+
+
+------------------------------------
+🍲 RECIPE APIs (CORE)
+/recipes
+
+POST   /recipes
+GET    /recipes
+GET    /recipes/:slug
+PATCH  /recipes/:id
+DELETE /recipes/:id
+
+Advanced Recipe APIs
+GET    /recipes/search
+GET    /recipes/trending
+GET    /recipes/recommended
+GET    /recipes/category/:category
+GET    /recipes/cuisine/:cuisine
+
+
+🔔 Notifications:
+
+NEW_RECIPE_FROM_FOLLOWING
+RECIPE_FEATURED
+RECIPE_MILESTONE
+
+
+----------------------------------------------
+⭐ REVIEW / COMMENT APIs
+/reviews
+
+POST   /reviews
+DELETE /reviews/:id
+GET    /recipes/:id/reviews
+
+
+🔔 Notifications:
+
+RECIPE_REVIEW
+REVIEW_RECEIVED
+
+
+-----------------------------------------
+❓ QUESTION APIs
+/questions
+
+POST   /questions
+DELETE /questions/:id
+POST   /questions/:id/upvote
+POST   /questions/:id/answer
+
+
+
+🔔 Notifications:
+
+QUESTION_ASKED
+QUESTION_ANSWERED
+ANSWER_UPVOTED
+
+
+---------------------------------------------
+📅 MEAL PLAN APIs
+/meal-plans
+
+POST   /meal-plans
+GET    /meal-plans
+GET    /meal-plans/:date
+PATCH  /meal-plans/:id
+DELETE /meal-plans/:id
+
+Meal Actions
+POST   /meal-plans/:id/complete
+POST   /meal-plans/:id/grocery-list
+
+
+🔔 Notifications:
+
+MEAL_PLAN_REMINDER
+COOKING_REMINDER
+GROCERY_LIST_READY
+
+-----------------------------------------------
+🛎 NOTIFICATION APIs
+/notifications
+
+GET    /notifications
+GET    /notifications/unread-count
+PATCH  /notifications/:id/read
+PATCH  /notifications/read-all
+
+(Internal / System)
+POST   /notifications   (service only)
+
+
+------------------------------------------------
+📊 INTERACTION / ANALYTICS
+/interactions
+
+POST   /interactions
+
+
+Used for:
+View tracking
+Recommendation engine
+Cooking progress
+
+🔔 Notifications:
+RECIPE_RECOMMENDED
+CONTINUE_COOKING
+
+
+-----------------------------------
+⚙️ ADMIN / SYSTEM APIs
+/admin
+
+POST   /admin/announce
+PATCH  /admin/recipes/:id/feature
+GET    /admin/reports
+
+
+🔔 Notifications:
+
+SYSTEM_ANNOUNCEMENT
+SYSTEM_ALERT
+POLICY_UPDATE
+
+----------------------------------------------
+🧠 EVENT → API → NOTIFICATION FLOW (IMPORTANT)
+
+Example: Review posted
+
+POST /reviews
+  → create Review
+  → update Recipe stats
+  → emit REVIEW_CREATED event
+  → Notification service creates RECIPE_REVIEW

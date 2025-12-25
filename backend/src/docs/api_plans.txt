@@ -1,0 +1,52 @@
+/*------------------------------------
+apis groups
+
+feedback/  review, comments, question
+user/  user, 
+
+--------------------------------------*/
+
+
+
+/*------------------------------------
+review or comment apis   /review
+--------------------------------------*/
+
+
+1. /give review on recipe with stars -> logged user  -> notify recipe user
+2. /delete review -> logged user
+ 
+
+/*------------------------------------
+notification apis /notify
+--------------------------------------*/
+1. Someone reviews your recipe
+2. Someone asks a question on your recipe
+3. Someone favorites your recipe
+4. System ( logged in, forget pass )
+5. Recipe crosses milestone (100 likes, 1k views)
+
+
+/create notify
+/mark as read
+
+
+/*------------------------------------
+question apis  /question
+--------------------------------------*/
+
+/create question by user
+/upvote
+/answer the question
+/delete question
+
+
+/*------------------------------------
+user apis 
+--------------------------------------*/
+1. /mark favraote and Unfavraoite
+2. /profile update
+3. / forgetpass - resetpass
+4. /login  by email+email otp
+5. signup by  email and use string before @ as username by default , then opt 
+6.
