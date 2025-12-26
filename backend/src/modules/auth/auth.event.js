@@ -1,66 +1,42 @@
 import eventBus from '../../utils/eventBus.js';
 import { MailService } from '../../middlewares/default/Nodemailer.js';
-import otpUtil from '../../utils/otp.js';
-import { AUTH_EVENTS } from './auth.constants.js';
-import { otpEmailTemplate } from '../../utils/templates/otp.email.js';
-import { resetPasswordTemplate } from '../../utils/templates/reset-password.email.js';
-
+import { welcomeEmailTemplate } from '../../utils/templates/email-templates.js';
+import { NotificationPreference, Notification } from '../user/user.model.js'
 const mailService = new MailService();
 
-/**
- * Signup OTP
- */
-eventBus.on(AUTH_EVENTS.USER_SIGNUP, async ({ user }) => {
-  
-  const otp = otpUtil.generate();
-  otpUtil.store(user.email, otp);
+eventBus.on("auth.signup", async ({ name, email, _id }) => {
+  /**
+   * Send welcome email
+   * Create Notification Preference model
+   */
+  await Notification.create({
+    userId: _id,
+    from: 'SukraBites',
+    type: 'SYSTEM',
+    title: 'Welcome to Cookbook',
+    message: `Hi ${name}, welcome to Cookbook! Explore our delicious recipes and get cooking!`,
+    isRead: false
+  })
+  const { subject, html, text } = welcomeEmailTemplate({ name });
+  await mailService.sendMail({ to: email, subject, html, text });
 
-  const { subject, html, text } = otpEmailTemplate({
-    otp,
-    name: user.name
-  });
+  await NotificationPreference.create({ userId: _id });
 
-  await mailService.sendMail({
-    to: user.email,
-    subject,
-    html,
-    text
-  });
-
-  console.log('📩 Signup OTP sent to', user.email);
+  console.log(' auth.signup fired');
 });
 
-/**
- * Login OTP
- */
-eventBus.on(AUTH_EVENTS.USER_LOGIN, async ({ email }) => {
-  const otp = otpUtil.generate();
-  otpUtil.store(email, otp);
 
-  const { subject, html, text } = otpEmailTemplate({ otp });
-
-  await mailService.sendMail({
-    to: email,
-    subject,
-    html,
-    text
-  });
-
-  console.log('📩 Login OTP sent to', email);
-});
-
-/**
- * Password reset email
- */
-eventBus.on(AUTH_EVENTS.PASSWORD_RESET, async ({ email, link }) => {
-  const { subject, html, text } = resetPasswordTemplate({ link });
-
-  await mailService.sendMail({
-    to: email,
-    subject,
-    html,
-    text
-  });
-
-  console.log('📩 Password reset link sent to', email);
+eventBus.on("auth.login", async ({ name, _id, time }) => {
+  /**
+   * Triggers:  SYSTEM notification → Login alert (optional)
+   */
+  await Notification.create({
+    userId: _id,
+    from: 'SukraBites',
+    type: 'SYSTEM',
+    title: `Login Alert at ${new Date(time).toLocaleString()}`,
+    message: `Hi ${name}, you just logged in at ${new Date(time).toLocaleString()}`,
+    isRead: false
+  })
+  console.log(' auth.login fired');
 });

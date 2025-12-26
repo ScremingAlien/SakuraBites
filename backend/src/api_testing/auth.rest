@@ -1,0 +1,33 @@
+### Get Request
+GET http://localhost:3000/api/v1/auth/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvamlibzMwNzlAbmN0aW1lLmNvbSIsIm5hbWUiOiJqb2ppYm8zMDc5Iiwic2x1ZyI6ImpvamlibzMwNzkiLCJfaWQiOiI2OTRlNWY4OWU1MjM2ZWVhNTEyZTE1NzEiLCJhdmF0YXIiOiJodHRwczovL2Nkbi1pY29ucy1wbmcuZmxhdGljb24uY29tLzUxMi82NTk2LzY1OTYxMjEucG5nIiwicHJlZmVyZW5jZXMiOnsiZGlldGFyeSI6W10sImV4Y2x1ZGVkSW5ncmVkaWVudHMiOltdLCJleGNsdWRlZENhdGVnb3JpZXMiOltdfSwiYXV0aFR5cGUiOiJsb2dpbiIsImlhdCI6MTc2Njc0NDIyMCwiZXhwIjoxNzY3MDAzNDIwfQ.C-PDVYlpOAHsQUK9ZQH4I7ddBmprLwqIRzmhOvUjJA8
+
+
+### Post Request
+POST http://localhost:3000/api/v1/auth/signup
+Content-Type: application/json
+
+{
+  "email": "Vinit006@gmail.com"
+}
+
+
+### Post Request
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "jojibo3079@nctime.com"
+}
+
+
+
+### Post Request
+POST http://localhost:3000/api/v1/auth/verify-otp
+Content-Type: application/json
+
+{
+  "otp": "975526",
+  "email": "jojibo3079@nctime.com"
+}

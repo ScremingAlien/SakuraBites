@@ -14,6 +14,8 @@ class JwtService {
    * @param {Object} payload - data to encode
    * @param {String} expiresIn - optional expiry (e.g. "15m", "7d")
    */
+
+
   sign(payload, expiresIn = DEFAULT_EXPIRES_IN) {
     return jwt.sign(payload, JWT_SECRET, {
       expiresIn,
