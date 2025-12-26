@@ -3,7 +3,7 @@
  * @param {string} text
  * @returns {string}
  */
-export default function slugify(text) {
+export function slugify(text) {
   if (!text || typeof text !== 'string') {
     throw new Error('slugify: input must be a string');
   }

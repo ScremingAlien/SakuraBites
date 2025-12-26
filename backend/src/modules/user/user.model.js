@@ -35,6 +35,8 @@ const UserSchema = new Schema({
           excludedIngredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }],
           excludedCategories: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
      },
+     isVerified: { type: Boolean, default: false },
+     otp: String,
      favorites: [{ type: Schema.Types.ObjectId, ref: 'Recipe', index: true }],
      socialLinks: {
           instagram: String,
@@ -47,7 +49,6 @@ const UserSchema = new Schema({
 const IngredientSchema = new Schema({
      name: { type: String, required: true, unique: true, index: true },
      slug: { type: String, unique: true },
-     category: { type: String, index: true }, // 'produce', 'masala', 'dairy'
      image: String,
      description: String, // For the ingredient info page
      nutrientsPer100g: {
@@ -199,8 +200,6 @@ const NotificationSchema = new Schema({
           index: true
      },
 
-
-
      // Lightweight message for in-app display
      title: String,
      message: String,
@@ -229,11 +228,30 @@ const NotificationPreferenceSchema = new Schema({
      },
 
      preferences: {
-          RECIPE_REVIEW: { inApp: Boolean, push: Boolean, email: Boolean },
-          RECIPE_QUESTION: { inApp: Boolean, push: Boolean, email: Boolean },
-          QUESTION_ANSWERED: { inApp: Boolean, push: Boolean, email: Boolean },
-          NEW_RECIPE_FROM_FOLLOWING: { inApp: Boolean, push: Boolean, email: Boolean },
-          SYSTEM: { inApp: Boolean, push: Boolean, email: Boolean }
+          RECIPE_REVIEW: {
+               type: Boolean,
+               default: true
+          },
+          RECIPE_REVIEW: {
+               type: Boolean,
+               default: true
+          },
+          RECIPE_QUESTION: {
+               type: Boolean,
+               default: true
+          },
+          QUESTION_ANSWERED: {
+               type: Boolean,
+               default: true
+          },
+          NEW_RECIPE_FROM_FOLLOWING: {
+               type: Boolean,
+               default: true
+          },
+          SYSTEM: {
+               type: Boolean,
+               default: true
+          }
      }
 
 }, baseOptions)

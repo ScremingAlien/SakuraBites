@@ -8,6 +8,6 @@ export default function authVerifier(req, res, next) {
     req.user = jwt.verify(token);
     next();
   } catch {
-    res.fail('Unauthorized', null, 401);
+    res.fail('Unauthorized', 401);
   }
 }
