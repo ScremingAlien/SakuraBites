@@ -25,6 +25,7 @@ const baseOptions = {
 const UserSchema = new Schema({
      email: { type: String, required: true, unique: true, index: true, lowercase: true },
      name: { type: String },
+     slug: { type: String, unique: true, index: true },
      avatar: {
           type: String,
           default: 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'
@@ -35,7 +36,6 @@ const UserSchema = new Schema({
           excludedCategories: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
      },
      favorites: [{ type: Schema.Types.ObjectId, ref: 'Recipe', index: true }],
-     following: [{ type: Schema.Types.ObjectId, ref: 'User' }],
      socialLinks: {
           instagram: String,
           website: String
@@ -148,12 +148,8 @@ const MealPlanSchema = new Schema({
 const ReviewSchema = new Schema({
      recipeId: { type: Schema.Types.ObjectId, ref: 'Recipe', required: true, index: true },
      userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-     rating: { type: Number, min: 1, max: 5, required: true },
+     rating: { type: Number, required: true },
      comment: String,
-     images: [String],
-     // Personal tips/variations can be stored here or as a separate 'Note'
-     personalNotes: String,
-     isCooked: { type: Boolean, default: true }
 }, baseOptions)
 
 ReviewSchema.index({ recipeId: 1, createdAt: -1 })
@@ -180,8 +176,71 @@ const QuestionSchema = new Schema({
      upvotes: { type: Number, default: 0 }
 }, baseOptions);
 
+const NotificationSchema = new Schema({
+     userId: {
+          type: Schema.Types.ObjectId,
+          ref: 'User',
+          required: true,
+          index: true
+     },
+
+     // Who triggered this notification (nullable for system)
+     from: String,
+     type: {
+          type: String,
+          required: true,
+          enum: [
+               'RECIPE_REVIEW',
+               'RECIPE_QUESTION',
+               'QUESTION_ANSWERED',
+               'NEW_RECIPE_FROM_FOLLOWING',
+               'SYSTEM'
+          ],
+          index: true
+     },
+
+
+
+     // Lightweight message for in-app display
+     title: String,
+     message: String,
+
+     // Status
+     isRead: {
+          type: Boolean,
+          default: false,
+          index: true
+     },
+
+     readAt: Date,
+
+
+}, baseOptions)
+
+NotificationSchema.index({ userId: 1, isRead: 1, createdAt: -1 })
+NotificationSchema.index({ userId: 1, createdAt: -1 })
+
+const NotificationPreferenceSchema = new Schema({
+     userId: {
+          type: Schema.Types.ObjectId,
+          ref: 'User',
+          unique: true,
+          index: true
+     },
+
+     preferences: {
+          RECIPE_REVIEW: { inApp: Boolean, push: Boolean, email: Boolean },
+          RECIPE_QUESTION: { inApp: Boolean, push: Boolean, email: Boolean },
+          QUESTION_ANSWERED: { inApp: Boolean, push: Boolean, email: Boolean },
+          NEW_RECIPE_FROM_FOLLOWING: { inApp: Boolean, push: Boolean, email: Boolean },
+          SYSTEM: { inApp: Boolean, push: Boolean, email: Boolean }
+     }
+
+}, baseOptions)
 
 // ---------- Exports ----------
+export const Notification = mongoose.model('Notification', NotificationSchema)
+export const NotificationPreference = mongoose.model('NotificationPreference', NotificationPreferenceSchema)
 export const User = mongoose.model('User', UserSchema)
 export const Recipe = mongoose.model('Recipe', RecipeSchema)
 export const Ingredient = mongoose.model('Ingredient', IngredientSchema)
