@@ -30,11 +30,7 @@ const UserSchema = new Schema({
           type: String,
           default: 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png'
      },
-     preferences: {
-          dietary: [{ type: String, index: true }], // vegan, keto, nut-free
-          excludedIngredients: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }],
-          excludedCategories: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }]
-     },
+    
      favorites: [{ type: Schema.Types.ObjectId, ref: 'Recipe', index: true }],
      socialLinks: {
           instagram: String,
@@ -229,11 +225,11 @@ const NotificationPreferenceSchema = new Schema({
      },
 
      preferences: {
-          RECIPE_REVIEW: { inApp: Boolean, push: Boolean, email: Boolean },
-          RECIPE_QUESTION: { inApp: Boolean, push: Boolean, email: Boolean },
-          QUESTION_ANSWERED: { inApp: Boolean, push: Boolean, email: Boolean },
-          NEW_RECIPE_FROM_FOLLOWING: { inApp: Boolean, push: Boolean, email: Boolean },
-          SYSTEM: { inApp: Boolean, push: Boolean, email: Boolean }
+          RECIPE_REVIEW: { type: Boolean, default: true },
+          RECIPE_QUESTION: { type: Boolean, default: true },
+          QUESTION_ANSWERED: { type: Boolean, default: true },
+          NEW_RECIPE_FROM_FOLLOWING: { type: Boolean, default: true },
+          SYSTEM: { type: Boolean, default: true }
      }
 
 }, baseOptions)

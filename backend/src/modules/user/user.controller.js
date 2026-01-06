@@ -8,23 +8,53 @@ export default class UserController {
     this.userService = UserService;
   }
 
-  
+
   add_to_favorites = async (req, res, next) => {
     try {
-      let isRecipe = await this.userService.isRecipe(req.params.id);
-      if (!isRecipe) return res.fail("Recipe not found", statusCode.NOT_FOUND);
+      /**
+       * feature/ if recipe is already added to favorite then remove it
+       * feature/ if recipe is not added to favorite then add it
+       */
 
       let d = await this.userService.addToFav({
         recipeId: req.params.id,
         userId: req.user.id,
       });
 
-      res.success("Recipe added to favorites", d, statusCode.OK);
+      res.success(d.message, d.data, statusCode.OK);
 
     } catch (err) {
       next(err);
     }
   };
- 
+
+  get_favorites = async (req, res, next) => {
+    try {
+      let d = await this.userService.getFav(req.user.id);
+      res.success("Get All Favorites", d, statusCode.OK);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+
+  get_preferences = async (req, res, next) => {
+    try {
+      let d = await this.userService.getPref(req.user.id);
+      res.success("Notification Preferences", d, statusCode.OK);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  update_preferences = async (req, res, next) => {
+    try {
+      let d = await this.userService.updatePref({ userId: req.user.id, body: req.body });
+      res.success("Updated Notification Preferences", d, statusCode.OK);
+    } catch (err) {
+      next(err);
+    }
+  };
+
 
 }
