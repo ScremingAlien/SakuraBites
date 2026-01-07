@@ -8,21 +8,45 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sansita: var(--font-sansita);
   --font-mono: var(--font-geist-mono);
 }
 
+
+/*
+-- unncomment this for dark mode
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
-  /* background: var(--background); */
-  background-color: rgb(227, 172, 181);
-  color: black;
-  /* color: var(--foreground); */
+  background: var(--background);
+  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+ 
+section {
+  @apply w-[90%] md:w-[84%] xl:w-[86%] mx-auto;
+}
+
+@layer utilities {
+  [data-flex="center"] {
+    @apply flex items-center justify-center;
+  }
+
+  [data-flex="between"] {
+    @apply flex items-center justify-between;
+  }
+
+  [data-flex="col"] {
+    @apply flex flex-col;
+  }
+
+  [data-flex="col-center"] {
+    @apply flex flex-col items-center justify-center;
+  }
 }
