@@ -17,6 +17,15 @@ export default class FeedbackController {
       res.success('Notification marked as read');
     } catch (e) { next(e); }
   };
+  getUnread = async (req, res, next) => {
+    try {
+      const data = await FeedbackService.unreadNoti({
+        userId: req.user.id,
+        limit: req.query.limit || null
+      })
+      res.success('UnRead Notification', data, statusCode.OK);
+    } catch (e) { next(e); }
+  };
 
   createReview = async (req, res, next) => {
     try {
@@ -27,6 +36,26 @@ export default class FeedbackController {
       });
 
       res.success('Review added', data, statusCode.CREATED);
+    } catch (e) { next(e); }
+  };
+  getReviewByUser = async (req, res, next) => {
+    try {
+      const data = await FeedbackService.getReviewByUser({
+        userId: req.user.id,
+        limit: req.query.limit || null
+      });
+
+      res.success('Review by User', data, statusCode.OK);
+    } catch (e) { next(e); }
+  };
+  getReviewByRecipe = async (req, res, next) => {
+    try {
+      const data = await FeedbackService.getRevByRecipe({
+        recipeId: req.params.id,
+        limit: req.query.limit || null  
+      });
+
+      res.success('Review on Recipe', data, statusCode.OK);
     } catch (e) { next(e); }
   };
 
@@ -57,7 +86,7 @@ export default class FeedbackController {
       const data = await FeedbackService.getRecipeQuestions({
         recipeId: req.params.id,
         userId: req.user.id,
-        limit:  req.query.limit || 10
+        limit: req.query.limit || null || 10
 
       });
       res.success('Question posted', data, statusCode.OK);
@@ -82,6 +111,25 @@ export default class FeedbackController {
         answer: req.body.answer
       });
       res.success('Question answered', data, statusCode.CREATED);
+    } catch (e) { next(e); }
+  };
+  getQuestionAskedByUser = async (req, res, next) => {
+    try {
+      const data = await FeedbackService.questionByUser({
+        userId: req.user.id,
+        limit: req.query.limit || null
+      });
+      res.success('Question Asked By User', data, statusCode.OK);
+    } catch (e) { next(e); }
+  };
+  getAnsweredByUser = async (req, res, next) => {
+    try {
+      const data = await FeedbackService.answeredByUser({
+        userId: req.user.id,
+        limit: req.query.limit || null
+      });
+
+      res.success('Answered By User', data, statusCode.OK);
     } catch (e) { next(e); }
   };
 

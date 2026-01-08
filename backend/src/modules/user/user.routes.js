@@ -4,6 +4,7 @@ import validate from '../../middlewares/default/validate.js';
 import rateLimiter from '../../middlewares/default/rateLimiter.js';
 import authVerifier from '../../middlewares/authVerifier.js';
 import { notifyPrefSchema } from './user.validator.js'
+
 const router = Router();
 const userController = new UserController();
 
@@ -21,6 +22,10 @@ router.put('/notify/preference', authVerifier, validate(notifyPrefSchema), userC
 
  * get notification preferences - 100
  * update notification preferences -100
+ * 
+ * get user by slug for profile and detilas - userM
+ * get user's favrecipes  - recipeM
+ *  
  * 
  */
 

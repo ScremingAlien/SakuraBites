@@ -9,4 +9,9 @@ const recipeController = new RecipeController();
 router.get('/', recipeController.getAll);
 router.post("/", recipeController.create); // <-- new
 
+/**
+ * create recipe: - recipeM
+ * get specific recipe by slug - recipeM
+ * 
+ */
 export default router;

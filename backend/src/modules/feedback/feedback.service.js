@@ -9,6 +9,13 @@ class FeedbackService {
     this.eventBus = eventBus;
   }
 
+  async unreadNoti({ userId, limit = 15 }) {
+
+    let notis = await Notification.find({ userId: userId, isRead: false }).limit(limit).sort({ createdAt: -1 }).lean();
+    return notis;
+
+  }
+
   async createReview({ recipeId, userId, rating, comment }) {
 
     let revi = await Review.create({
@@ -33,8 +40,6 @@ class FeedbackService {
     eventBus.emit('review.deleted', { reviewId, userId });
     return true;
   }
-
-
 
   async createQuestion({ recipeId, userId, question }) {
 
@@ -104,6 +109,27 @@ class FeedbackService {
 
     eventBus.emit('notification.read', { notificationId, userId });
     return true;
+  }
+
+  async questionByUser({ userId, limit = 15 }) {
+    let q = await Question.find({ userId: userId }).limit(limit).sort({ createdAt: -1 }).lean();
+    return q;
+  }
+  async answeredByUser({ userId, limit = 15 }) {
+    const q = await Question.find({ "answer.answeredBy": userId }).sort({ createdAt: -1 }).limit(limit).lean();
+
+    return q;
+  }
+
+  async getRevByRecipe({ recipeId, limit = 15 }) {
+    let q = await Review.find({ recipeId:recipeId }).limit(limit).sort({ createdAt: -1 }).lean();
+    return q;
+  }
+
+  
+  async getRevByRecipe({ userId, limit = 15 }) {
+    let q = await Review.find({ userId: userId }).limit(limit).sort({ createdAt: -1 }).lean();
+    return q;
   }
 }
 
