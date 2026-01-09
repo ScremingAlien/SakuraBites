@@ -50,7 +50,7 @@ const IngredientSchema = new Schema({
      name: { type: String, required: true, unique: true, index: true },
      slug: { type: String, unique: true },
      image: String,
-     description: String, // For the ingredient info page
+     description: String, // For the ingredient info page -
      nutrientsPer100g: {
           calories: { type: Number, default: 0 },
           protein: { type: Number, default: 0 },
@@ -76,7 +76,7 @@ const InstructionSchema = new Schema({
      text: { type: String, required: true },
      isHeading: { type: Boolean, default: false },
      image: String,
-     timerSeconds: Number, // For in-app cooking mode
+
 }, { _id: false })
 
 const RecipeSchema = new Schema({
@@ -99,7 +99,7 @@ const RecipeSchema = new Schema({
      // Discovery & Organization
      categories: [{ type: String, index: true }], // ['Dinner', 'Italian']
      tags: [{ type: String, index: true }], // ['Quick', 'High Protein']
-     cuisine: { type: String, index: true },
+
      relatedRecipeIds: [{ type: Schema.Types.ObjectId, ref: 'Recipe' }],
      // Total nutrients (Calculated on save based on ingredients)
      totalNutrients: {
@@ -115,7 +115,16 @@ const RecipeSchema = new Schema({
           favoriteCount: { type: Number, default: 0 }
      },
 
-     isPrivate: { type: Boolean, default: false, index: true },
+     dataComplete: [
+          {
+               initiated: { type: Boolean, default: false },
+               scaling: { type: Boolean, default: false },
+               ingredients: { type: Boolean, default: false },
+               instructions: { type: Boolean, default: false },
+               finialized: { type: Boolean, default: false }
+          }
+     ],
+
      isDeleted: { type: Boolean, default: false, index: true }
 }, baseOptions)
 
