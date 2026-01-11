@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Sansita, Bitter , Inter } from "next/font/google";
+import { Geist, Sansita, DM_Serif_Display, Bitter, Inter } from "next/font/google";
 import "./globals.css";
 
-const sansita = Sansita({
-  weight: ["400", "700"],
+const garamond = DM_Serif_Display({
   subsets: ["latin"],
-  variable: "--font-sansita",
+  weight: ["400"],
+  variable: "--font-garamond",
 });
 const inter = Inter({
   subsets: ["latin"],
@@ -17,7 +17,7 @@ const bitter = Bitter({
   variable: "--font-bitter",
 });
 
- 
+
 
 
 export const metadata: Metadata = {
@@ -29,7 +29,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
   return (
     <html lang="en">
       <body
-        className={`   ${bitter.variable} ${inter.variable} ${sansita.variable} antialiased`}
+        className={`   ${bitter.variable} ${inter.variable} ${garamond.variable}  antialiased`}
       >
         {children}
       </body>

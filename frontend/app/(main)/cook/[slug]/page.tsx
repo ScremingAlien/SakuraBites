@@ -4,9 +4,21 @@ import React from 'react'
 User by slug
 --------------------------------------*/
 
-type Props = {}
-export default function page({}: Props) {
+type Props = {
+  params: Promise<{ slug: string }>
+}
+export default async function page({ params }: Props) {
+  const { slug } = await params;
   return (
-    <section>user page</section>
+    <section>
+      {slug}
+      - userpage
+
+      <br />
+
+
+      <h5 className=' font-garamond  text-4xl'>Focaccia Grinder Sandwich</h5>
+
+    </section>
   )
 }
