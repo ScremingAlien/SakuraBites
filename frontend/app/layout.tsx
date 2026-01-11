@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Sansita, Bitter } from "next/font/google";
+import { Geist, Sansita, Bitter , Inter } from "next/font/google";
 import "./globals.css";
 
 const sansita = Sansita({
@@ -7,6 +7,10 @@ const sansita = Sansita({
   subsets: ["latin"],
   variable: "--font-sansita",
 });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+})
 
 const bitter = Bitter({
   subsets: ["latin"],
@@ -25,7 +29,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
   return (
     <html lang="en">
       <body
-        className={`   ${bitter.variable}  ${sansita.variable} antialiased`}
+        className={`   ${bitter.variable} ${inter.variable} ${sansita.variable} antialiased`}
       >
         {children}
       </body>

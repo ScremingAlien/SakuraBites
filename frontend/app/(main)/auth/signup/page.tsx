@@ -22,7 +22,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+const SignupPage = () => {
   const [step, setStep] = useState<"email" | "otp">("email");
   const [email, setEmail] = useState("");
   const router = useRouter();
@@ -41,17 +41,17 @@ export default function LoginPage() {
     formState: { isSubmitting },
   } = emailForm;
 
-  const sendLoginOtp = async (data: EmailSchema) => {
+  const sendSignupOtp = async (data: EmailSchema) => {
     try {
       setEmail(data.email);
 
-      const res = await api.post("/auth/login", data);
+      const res = await api.post("/auth/signup", data);
 
       if (res.data?.data?.next) {
         setStep("otp");
       }
     } catch (err: any) {
-      alert(err.response?.data?.message || "Failed to send OTP!");
+      alert(err.response?.data?.message || "Signup failed");
     }
   };
 
@@ -77,15 +77,14 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center">
-      <div className="w-full max-w-md p-8 rounded-2xl shadow border border-ONE">
-        <h1 className="text-3xl font-semibold mb-6 text-center text-ONE">
-          Login
-        </h1>
-
+      <div className="w-full max-w-md p-8  ">
+      <h2 className="  text-center mb-8">
+          Get Started
+        </h2>
         {step === "email" && (
           <Form {...emailForm}>
             <form
-              onSubmit={emailForm.handleSubmit(sendLoginOtp)}
+              onSubmit={emailForm.handleSubmit(sendSignupOtp)}
               className="space-y-6"
             >
               <FormField
@@ -95,11 +94,7 @@ export default function LoginPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input
-                        autoComplete="email"
-                        placeholder="example@gmail.com"
-                        {...field}
-                      />
+                      <Input placeholder="example@gmail.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -109,7 +104,7 @@ export default function LoginPage() {
               <Button
                 disabled={isSubmitting}
                 type="submit"
-                className="w-full bg-ONE hover:bg-ONE/90"
+            className="w-full py-5 bg-THREE  "
               >
                 {isSubmitting ? "Sending..." : "Send OTP"}
               </Button>
@@ -148,8 +143,8 @@ export default function LoginPage() {
                 )}
               />
 
-              <Button type="submit" className="w-full bg-ONE hover:bg-ONE/90">
-                Verify OTP
+              <Button type="submit"     className="w-full py-5 bg-THREE  ">
+                Verify & Create Account
               </Button>
             </form>
           </Form>
@@ -157,4 +152,6 @@ export default function LoginPage() {
       </div>
     </div>
   );
-}
+};
+
+export default SignupPage;
