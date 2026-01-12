@@ -1,0 +1,37 @@
+### recipe/chicken-with-dried-apricot-sauce-PSZ
+GET http://localhost:5000/api/v1/recipe/chicken-with-dried-apricot-sauce-PSZ?type=RECIPE
+
+
+
+### recipe/ingredient/:slug
+GET http://localhost:5000/api/v1/recipe/ingredient/chicken-with-dried-apricot-sauce-PSZ?type=RECIPE
+
+
+### R-C/METADATA API
+POST http://localhost:5000/api/v1/recipe/r-c/metadata
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im55cW9ub3dpQGRlbmlwbC5jb20iLCJuYW1lIjoibnlxb25vd2kiLCJzbHVnIjoibnlxb25vd2kiLCJfaWQiOiI2OTYwYTFjZDZlM2U0NDg3NDFiNzZkMDUiLCJhdmF0YXIiOiJodHRwczovL2Nkbi1pY29ucy1wbmcuZmxhdGljb24uY29tLzUxMi82NTk2LzY1OTYxMjEucG5nIiwicHJlZmVyZW5jZXMiOnsiZGlldGFyeSI6W10sImV4Y2x1ZGVkSW5ncmVkaWVudHMiOltdLCJleGNsdWRlZENhdGVnb3JpZXMiOltdfSwidGltZSI6MTc2ODIwMTA4MzQyNSwiYXV0aFR5cGUiOiJsb2dpbiIsImlhdCI6MTc2ODIwMTA4MywiZXhwIjoxNzY4NDYwMjgzfQ.do55eAMjqyb3_g2dAmKxYEoppE1rNSA2juJOiFSEvsY
+
+{
+  "title": "testing the recipe"
+}
+
+
+### Post Request
+POST http://localhost:5000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "vp.menon06@gmail.com"
+}
+
+
+
+### Post Request
+POST http://localhost:5000/api/v1/auth/verify-otp
+Content-Type: application/json
+
+{
+  "otp": "178109",
+  "email": "vp.menon06@gmail.com"
+}

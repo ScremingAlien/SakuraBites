@@ -9,6 +9,7 @@ export const createReviewSchema = z.object({
 
 export const createQuestionSchema = z.object({
   body: z.object({
+    recipeId: z.string(),
     question: z.string().min(5)
   })
 });

@@ -17,61 +17,61 @@ class UserService {
   }
 
   async addToFav({ recipeId, userId }) {
-
-    let data = {
-      message: "",
-      data: {}
-    }
-
     if (!(await this.isRecipe(recipeId))) {
       throw new Error("Recipe not found");
     }
 
-    // check is recipe id is alredy exist in user favs
-    let user = await User.findById(userId);
+    const user = await User.findById(userId);
+    if (!user) throw new Error("User not found");
 
-    if (user.favorites.includes(recipeId)) {
-      // recipe is alredy incuded , so delete it
-      user.favorites = user.favorites.filter((id) => id !== recipeId);
-      await user.save();
+    const alreadyFav = user.favorites.some(
+      id => id.toString() === recipeId.toString()
+    );
 
-      // modify data
-      data.message = "Recipe removed from favorites";
+    let update;
+    let message;
+    let event;
 
-      // Emit event
-      this.userService.eventBus.emit("user.removed_from_favorites", {
-        recipeId: recipeId,
-        userId: userId,
-      });
-
+    if (alreadyFav) {
+      update = { $pull: { favorites: recipeId } };
+      message = "Recipe removed from favorites";
+      event = "user.removed_from_favorites";
     } else {
-      data.message = "Recipe added to favorites";
-      user.favorites.push(recipeId);
-      await user.save();
-
-      // Emit event
-      this.userService.eventBus.emit("user.added_to_favorites", {
-        recipeId: recipeId,
-        userId: userId,
-      });
+      update = { $addToSet: { favorites: recipeId } }; // prevents duplicates
+      message = "Recipe added to favorites";
+      event = "user.added_to_favorites";
     }
 
-    data.data = user.favorites;
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      update,
+      { new: true }
+    );
 
-    return data;
+    this.eventBus.emit(event, { recipeId, userId });
 
+    return {
+      message,
+      data: updatedUser.favorites
+    };
   }
 
-  async getFav(userId) {
-    let user = await User.findById(userId);
-    return user.favorites;
-  }
-  async updatePref({ userId, body }) {
-    let notifypref = await NotificationPreference.findByIdAndUpdate(userId, { preferences: { ...body } }, {  upsert: true, new: true });
+  async getPref(userId) {
+    let notifypref = await NotificationPreference.findOne({ userId: userId }).lean();
     return notifypref;
   }
-
-
+  async getFav(userId) {
+ 
+    let user = await User.findById(userId).select("favorites").lean();
+   
+    let data = await User.populate(user, { path: "favorites", select: "title slug coverImage" });
+   
+    return data.favorites;
+  }
+  async updatePref({ userId, body }) {
+    let notifypref = await NotificationPreference.findByIdAndUpdate(userId, { preferences: { ...body } }, { upsert: true, new: true });
+    return notifypref;
+  }
 
 }
 

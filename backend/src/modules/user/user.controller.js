@@ -18,7 +18,7 @@ export default class UserController {
 
       let d = await this.userService.addToFav({
         recipeId: req.params.id,
-        userId: req.user.id,
+        userId: req.user._id,
       });
 
       res.success(d.message, d.data, statusCode.OK);
@@ -30,7 +30,7 @@ export default class UserController {
 
   get_favorites = async (req, res, next) => {
     try {
-      let d = await this.userService.getFav(req.user.id);
+      let d = await this.userService.getFav(req.user._id);
       res.success("Get All Favorites", d, statusCode.OK);
     } catch (err) {
       next(err);
@@ -40,7 +40,7 @@ export default class UserController {
 
   get_preferences = async (req, res, next) => {
     try {
-      let d = await this.userService.getPref(req.user.id);
+      let d = await this.userService.getPref(req.user._id);
       res.success("Notification Preferences", d, statusCode.OK);
     } catch (err) {
       next(err);
@@ -49,7 +49,7 @@ export default class UserController {
 
   update_preferences = async (req, res, next) => {
     try {
-      let d = await this.userService.updatePref({ userId: req.user.id, body: req.body });
+      let d = await this.userService.updatePref({ userId: req.user._id, body: req.body });
       res.success("Updated Notification Preferences", d, statusCode.OK);
     } catch (err) {
       next(err);

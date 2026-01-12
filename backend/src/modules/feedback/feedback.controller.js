@@ -12,7 +12,7 @@ export default class FeedbackController {
     try {
       await FeedbackService.markNotificationRead({
         notificationId: req.params.id,
-        userId: req.user.id
+        userId: req.user._id
       });
       res.success('Notification marked as read');
     } catch (e) { next(e); }
@@ -20,7 +20,7 @@ export default class FeedbackController {
   getUnread = async (req, res, next) => {
     try {
       const data = await FeedbackService.unreadNoti({
-        userId: req.user.id,
+        userId: req.user._id,
         limit: req.query.limit || null
       })
       res.success('UnRead Notification', data, statusCode.OK);
@@ -31,7 +31,7 @@ export default class FeedbackController {
     try {
       const data = await FeedbackService.createReview({
         recipeId: req.params.id,
-        userId: req.user.id,
+        userId: req.user._id,
         ...req.body
       });
 
@@ -41,7 +41,7 @@ export default class FeedbackController {
   getReviewByUser = async (req, res, next) => {
     try {
       const data = await FeedbackService.getReviewByUser({
-        userId: req.user.id,
+        userId: req.user._id,
         limit: req.query.limit || null
       });
 
@@ -63,7 +63,7 @@ export default class FeedbackController {
     try {
       await FeedbackService.deleteReview({
         reviewId: req.params.id,
-        userId: req.user.id
+        userId: req.user._id
       });
       res.success('Review deleted');
     } catch (e) { next(e); }
@@ -73,7 +73,7 @@ export default class FeedbackController {
     try {
       const data = await FeedbackService.createQuestion({
         recipeId: req.body.recipeId,
-        userId: req.user.id,
+        userId: req.user._id,
         question: req.body.question
       });
       res.success('Question posted', data, statusCode.CREATED);
@@ -85,7 +85,7 @@ export default class FeedbackController {
 
       const data = await FeedbackService.getRecipeQuestions({
         recipeId: req.params.id,
-        userId: req.user.id,
+        userId: req.user._id,
         limit: req.query.limit || null || 10
 
       });
@@ -97,7 +97,7 @@ export default class FeedbackController {
     try {
       await FeedbackService.upvoteQuestion({
         questionId: req.params.id,
-        userId: req.user.id
+        userId: req.user._id
       });
       res.success('Question upvoted', null, statusCode.CREATED);
     } catch (e) { next(e); }
@@ -107,7 +107,7 @@ export default class FeedbackController {
     try {
       const data = await FeedbackService.answerQuestion({
         questionId: req.params.id,
-        userId: req.user.id,
+        userId: req.user._id,
         answer: req.body.answer
       });
       res.success('Question answered', data, statusCode.CREATED);
@@ -116,7 +116,7 @@ export default class FeedbackController {
   getQuestionAskedByUser = async (req, res, next) => {
     try {
       const data = await FeedbackService.questionByUser({
-        userId: req.user.id,
+        userId: req.user._id,
         limit: req.query.limit || null
       });
       res.success('Question Asked By User', data, statusCode.OK);
@@ -125,7 +125,7 @@ export default class FeedbackController {
   getAnsweredByUser = async (req, res, next) => {
     try {
       const data = await FeedbackService.answeredByUser({
-        userId: req.user.id,
+        userId: req.user._id,
         limit: req.query.limit || null
       });
 
@@ -137,7 +137,7 @@ export default class FeedbackController {
     try {
       await FeedbackService.deleteQuestion({
         questionId: req.params.id,
-        userId: req.user.id
+        userId: req.user._id
       });
       res.success('Question deleted', null, statusCode.OK);
     } catch (e) { next(e); }

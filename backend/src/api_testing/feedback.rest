@@ -1,33 +1,5 @@
-### GET LOGGED IN USER
-GET http://localhost:5000/api/v1/auth/me
+### review/revie-by-user
+GET http://localhost:5000/api/v1/review/revie-by-user
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im55cW9ub3dpQGRlbmlwbC5jb20iLCJuYW1lIjoibnlxb25vd2kiLCJzbHVnIjoibnlxb25vd2kiLCJfaWQiOiI2OTYwYTFjZDZlM2U0NDg3NDFiNzZkMDUiLCJhdmF0YXIiOiJodHRwczovL2Nkbi1pY29ucy1wbmcuZmxhdGljb24uY29tLzUxMi82NTk2LzY1OTYxMjEucG5nIiwicHJlZmVyZW5jZXMiOnsiZGlldGFyeSI6W10sImV4Y2x1ZGVkSW5ncmVkaWVudHMiOltdLCJleGNsdWRlZENhdGVnb3JpZXMiOltdfSwidGltZSI6MTc2Nzk0MDYxMTY1MSwiYXV0aFR5cGUiOiJzaWdudXAiLCJpYXQiOjE3Njc5NDA2MTEsImV4cCI6MTc2ODE5OTgxMX0.Q6LbWMPecZL4SGnJXLF4UP7Iv-BnFGWJ5V4cO-b5mV4
 
-
-### SIGNUP API
-POST http://localhost:5000/api/v1/auth/signup
-Content-Type: application/json
-
-{
-  "email": "vp.menon06@gmail.com"
-}
-
-
-### LOGIN API
-POST http://localhost:5000/api/v1/auth/login
-Content-Type: application/json
-
-{
-  "email": "nyqonowi@denipl.com"
-}
-
-
-
-### OTP API
-POST http://localhost:5000/api/v1/auth/verify-otp
-Content-Type: application/json
-
-{
-  "otp": "586583",
-  "email": "nyqonowi@denipl.com"
-}

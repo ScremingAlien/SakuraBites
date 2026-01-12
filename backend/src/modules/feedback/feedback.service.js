@@ -34,7 +34,7 @@ class FeedbackService {
     let review = await Review.findById(reviewId);
     if (!review) throw new Error('Review not found');
 
-    if (review.userId !== userId) throw new Error('Unauthorized');
+    if (review.userId != userId) throw new Error('Unauthorized');
 
     await Review.deleteOne({ _id: reviewId });
     eventBus.emit('review.deleted', { reviewId, userId });
@@ -49,8 +49,8 @@ class FeedbackService {
       question
     });
 
-    eventBus.emit('question.created', q);
-    return q;
+    eventBus.emit('question.created', que);
+    return que;
   }
   async getRecipeQuestions({ recipeId, userId, limit }) {
 
@@ -127,7 +127,7 @@ class FeedbackService {
   }
 
   
-  async getRevByRecipe({ userId, limit = 15 }) {
+  async getReviewByUser({ userId, limit = 15 }) {
     let q = await Review.find({ userId: userId }).limit(limit).sort({ createdAt: -1 }).lean();
     return q;
   }
