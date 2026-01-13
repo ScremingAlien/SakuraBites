@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { api } from "@/lib/api";
+import { FETCH } from "@/lib/api";
 import {
   EmailSchema,
   emailSchema,
@@ -45,7 +45,7 @@ export default function LoginPage() {
     try {
       setEmail(data.email);
 
-      const res = await api.post("/auth/login", data);
+      const res = await FETCH.post("/auth/login", data);
 
       if (res.data?.data?.next) {
         setStep("otp");
@@ -57,7 +57,7 @@ export default function LoginPage() {
 
   const verifyOtp = async (data: OTPSchema) => {
     try {
-      const res = await api.post("/auth/verify-otp", {
+      const res = await FETCH.post("/auth/verify-otp", {
         email,
         otp: data.otp,
       });
@@ -78,9 +78,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center">
       <div className="w-full max-w-md p-8    ">
-        <h2 className="  text-center mb-8">
-          Login
-        </h2>
+        <h2 className="  text-center mb-8">Login</h2>
 
         {step === "email" && (
           <Form {...emailForm}>

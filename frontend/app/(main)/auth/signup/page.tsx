@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { api } from "@/lib/api";
+import { FETCH } from "@/lib/api";
 import {
   EmailSchema,
   emailSchema,
@@ -45,7 +45,7 @@ const SignupPage = () => {
     try {
       setEmail(data.email);
 
-      const res = await api.post("/auth/signup", data);
+      const res = await FETCH.post("/auth/signup", data);
 
       if (res.data?.data?.next) {
         setStep("otp");
@@ -57,7 +57,7 @@ const SignupPage = () => {
 
   const verifyOtp = async (data: OTPSchema) => {
     try {
-      const res = await api.post("/auth/verify-otp", {
+      const res = await FETCH.post("/auth/verify-otp", {
         email,
         otp: data.otp,
       });
@@ -78,9 +78,7 @@ const SignupPage = () => {
   return (
     <div className="min-h-[80vh] flex items-center justify-center">
       <div className="w-full max-w-md p-8  ">
-      <h2 className="  text-center mb-8">
-          Get Started
-        </h2>
+        <h2 className="  text-center mb-8">Get Started</h2>
         {step === "email" && (
           <Form {...emailForm}>
             <form
@@ -104,7 +102,7 @@ const SignupPage = () => {
               <Button
                 disabled={isSubmitting}
                 type="submit"
-            className="w-full py-5 bg-THREE  "
+                className="w-full py-5 bg-THREE  "
               >
                 {isSubmitting ? "Sending..." : "Send OTP"}
               </Button>
@@ -143,7 +141,7 @@ const SignupPage = () => {
                 )}
               />
 
-              <Button type="submit"     className="w-full py-5 bg-THREE  ">
+              <Button type="submit" className="w-full py-5 bg-THREE  ">
                 Verify & Create Account
               </Button>
             </form>
