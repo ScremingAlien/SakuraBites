@@ -13,17 +13,17 @@ const feedbackController = new FeedbackController();
 Review  /review   apis
 --------------------------------------*/
 router.get('/review/review-by-user', authVerifier, feedbackController.getReviewByUser); // 100
-router.get('/review/:id/by-recipe', authVerifier, feedbackController.getReviewByRecipe); // 100
+router.get('/review/:id/by-recipe', feedbackController.getReviewByRecipe); // 100
 router.post('/review/:id', authVerifier, validate(createReviewSchema), feedbackController.createReview); // 100
 router.delete('/review/:id', authVerifier, feedbackController.deleteReview); // 100
- 
+
 
 /*------------------------------------
 Question  /question   apis
 --------------------------------------*/
-router.get('/questions/:id/by-recipe', authVerifier, feedbackController.getQuestionsByRecipe); // 100
-router.get('/questions/que-by-user', authVerifier, feedbackController.getQuestionAskedByUser); // 100
-router.get('/questions/ans-by-user', authVerifier, feedbackController.getAnsweredByUser); // 100
+router.get('/questions/:id/by-recipe', feedbackController.getQuestionsByRecipe); // 100
+router.get('/questions/que-by-user', feedbackController.getQuestionAskedByUser); // 100
+router.get('/questions/ans-by-user', feedbackController.getAnsweredByUser); // 100
 router.post('/questions', authVerifier, validate(createQuestionSchema), feedbackController.createQuestion); //100
 router.post('/questions/:id/answer', authVerifier, validate(answerQuestionSchema), feedbackController.answerQuestion); // 100
 router.post('/questions/:id/upvote', authVerifier, feedbackController.upvoteQuestion); // 100

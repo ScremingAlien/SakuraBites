@@ -52,9 +52,9 @@ class FeedbackService {
     eventBus.emit('question.created', que);
     return que;
   }
-  async getRecipeQuestions({ recipeId, userId, limit }) {
+  async getRecipeQuestions({ recipeId,   limit }) {
 
-    let q = await Question.find({ recipeId: recipeId, userId: userId }).limit(limit).sort({ createdAt: -1 }).lean();
+    let q = await Question.find({ recipeId: recipeId  }).limit(limit).sort({ createdAt: -1 }).lean();
     return q;
   }
 

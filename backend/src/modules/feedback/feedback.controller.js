@@ -85,7 +85,6 @@ export default class FeedbackController {
 
       const data = await FeedbackService.getRecipeQuestions({
         recipeId: req.params.id,
-        userId: req.user._id,
         limit: req.query.limit || null || 10
 
       });
