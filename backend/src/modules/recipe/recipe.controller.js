@@ -2,6 +2,7 @@ import RecipeService from "./recipe.service.js";
 import { statusCode } from '../../utils/constants/statusCode.js';
 import './recipe.event.js'
 import { Recipe, Ingredient } from '../user/user.model.js'
+import { slugify } from "../../utils/slugify.js";
 
 export default class RecipeController {
   constructor() {
@@ -75,7 +76,6 @@ export default class RecipeController {
        * increse the count of the ingredient
        */
 
-
       res.success('Get Ingredient Usage By Slug', null, statusCode.OK);
 
     } catch (err) {
@@ -83,6 +83,66 @@ export default class RecipeController {
     }
   }
 
+  createIngredient = async (req, res, next) => {
+    try {
+      /**
+       * @body
+       * name, slug?, description?, image?
+       */
+
+      // is alredy present with same name? or slug
+      let isAlredy = await this.recipeService.INGREDIENT.findOne({ $or: [{ name: req.body.name }, { slug: slugify(req.body.name) }] }).lean();
+      if (isAlredy) throw new Error('Ingredient is already exist');
+
+      // create
+      let data = {
+        name: req.body.name,
+        slug: slugify(req.body.name),
+        description: req.body.description || "",
+        image: req.body.image || "",
+      }
+      if (req.body.nutrientsPer100g) {
+        data.nutrientsPer100g = {
+          calories: req.body.nutrientsPer100g.calories || 0,
+          fat: req.body.nutrientsPer100g.fat || 0,
+          carbs: req.body.nutrientsPer100g.carbs || 0,
+          protein: req.body.nutrientsPer100g.protein || 0
+        }
+      }
+      let ing = await this.recipeService.INGREDIENT.create(data);
+      this.recipeService.eventBus.emit('ingredient.created', ing);
+      res.success('Create Ingredient', ing, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+  updateIngredient = async (req, res, next) => {
+    try {
+      /**
+       * @body
+       * name, slug?, description?, image?
+       */
+
+
+    } catch (err) {
+      next(err)
+    }
+  }
+  deleteIngredient = async (req, res, next) => {
+    try {
+      /**
+       * @body
+       * name, slug?, description?, image?
+       */
+      let ing = await this.recipeService.INGREDIENT.findOneAndDelete({ slug: req.params.slug });
+      if(!ing) throw new Error('Ingredient not found');
+      this.recipeService.eventBus.emit('ingredient.deleted', ing);
+      res.success('Delete Ingredient', ing, statusCode.OK);
+
+    } catch (err) {
+      next(err)
+    }
+  }
 
   /*------------------------------------
   Recipe creation controllers
@@ -93,10 +153,10 @@ export default class RecipeController {
        * @body
        * title, description?, coverImage?, videoUrl?
        */
-      
-      let d = await this.recipeService.setMetadata(req.body.title, req.body,req.user._id);
+
+      let d = await this.recipeService.setMetadata(req.body.title, req.body, req.user._id);
       res.success(d.message, d.data, statusCode.OK);
- 
+
     } catch (err) {
       next(err)
     }

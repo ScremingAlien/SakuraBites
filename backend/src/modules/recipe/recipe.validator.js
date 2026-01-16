@@ -19,7 +19,7 @@ export const queryRecipeSchema = z.object({
     }
   ),
 });
- 
+
 export const setMetaSchema = z.object({
   body: z.object(
     {
@@ -48,3 +48,31 @@ export const setMetaSchema = z.object({
     }
   ),
 });
+
+export const ingredientSchema = z.object({
+  body: z.object(
+    {
+      name: z
+        .string({ required_error: "Name is required" })
+        .min(1, "Name cannot be empty"),
+      image: z
+        .string()
+        .url("Image must be a valid URL")
+        .optional(),
+      description: z
+        .string()
+        .min(1, "Description cannot be empty")
+        .optional(),
+      nutrientsPer100g: z.object({
+        calories: z.number().optional(),
+        protein: z.number().optional(),
+        carbs: z.number().optional(),
+        fat: z.number().optional(),
+      }).optional(),
+    },
+    {
+      required_error: "Request body is required",
+      invalid_type_error: "Body must be an object",
+    }
+  ),
+})

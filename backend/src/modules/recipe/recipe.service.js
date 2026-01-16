@@ -5,7 +5,7 @@ import { slugify } from '../../utils/slugify.js'
 class RecipeService {
 
   constructor() {
-
+    this.INGREDIENT = Ingredient;
     this.eventBus = eventBus;
   }
   async isRecipebySlug(slug) {
