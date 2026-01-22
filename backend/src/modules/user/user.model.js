@@ -89,9 +89,9 @@ const RecipeSchema = new Schema({
 
      // Scaling Logic
      baseServings: { type: Number, default: 4, required: true },
-     prepTime: { type: Number, index: true }, // in minutes
-     cookTime: { type: Number, index: true }, // in minutes
-     difficulty: { type: String, enum: ['easy', 'medium', 'hard'], index: true },
+     prepTime: { type: Number, index: true, default: 0 }, // in minutes
+     cookTime: { type: Number, index: true, default: 0 }, // in minutes
+     difficulty: { type: String, enum: ['easy', 'medium', 'hard'], index: true, default: 'easy' },
 
      ingredients: [RecipeIngredientSchema],
      instructions: [InstructionSchema],
