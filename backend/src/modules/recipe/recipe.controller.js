@@ -24,11 +24,27 @@ export default class RecipeController {
     }
   }
 
+  quick_picks = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getQuickPicks();
+      res.success('Get Quick Picks', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+  category_highlights = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getCategoryHighlights();
+      res.success('Get  Category Highlights', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+
+
   most_reviewed_recipes = async (req, res, next) => {
     try {
-      // let data = await this.recipeHomepageService.getSearchSuggestions(req.query.q, req.query.limit || 5);
-      // let data = await this.recipeHomepageService.getCategoryRow("Dinner", req.query.limit || 8);
-      let data = await this.recipeHomepageService.getCategoryHighlights();
+      let data = await this.recipeHomepageService.getMostReviewedRecipes();
       res.success('Get Most Reviewed Recipes', data, statusCode.OK);
     } catch (err) {
       next(err)
@@ -50,6 +66,35 @@ export default class RecipeController {
     }
   }
 
+  /*------------------------------------
+  Other small pages controllers
+  --------------------------------------*/
+  search_suggestions = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getSearchSuggestions(req.query.q, req.query.limit || 5);
+      res.success('Get Search Suggestions', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+  all_categorys = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getAvailableCategories();
+      res.success('Get All Categories', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  category_rows = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getCategoryRow(req.params.category, req.query.limit || 8);
+      res.success('Get Category Rows', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+ 
   /*------------------------------------
   Recipe controllers
   --------------------------------------*/

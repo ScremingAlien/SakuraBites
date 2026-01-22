@@ -5,6 +5,8 @@ class RecipeHomepageService {
      constructor() {
           this.eventBus = eventBus;
      }
+
+     // homepage
      async getMostPopularRecipes(limit = 10) {
           return Recipe.find(
                { isDeleted: false },
@@ -41,25 +43,6 @@ class RecipeHomepageService {
                .limit(limit)
                .lean()
      }
-     async getCategoryRow(category, limit = 8) {
-          return Recipe.find(
-               {
-                    isDeleted: false,
-                    categories: category
-               },
-               {
-                    title: 1,
-                    slug: 1,
-                    coverImage: 1,
-                    prepTime: 1,
-                    difficulty: 1,
-                    stats: 1
-               }
-          )
-               .sort({ "stats.favoriteCount": -1 })
-               .limit(limit)
-               .lean();
-     }
      async getQuickPicks(maxPrepTime = 30, limit = 8) {
           return Recipe.find(
                {
@@ -81,6 +64,65 @@ class RecipeHomepageService {
                .limit(limit)
                .lean();
      }
+     async getCategoryHighlights(limit = 6) {
+          return Recipe.aggregate([
+               {
+                    $match: { isDeleted: false }
+               },
+               {
+                    $unwind: "$categories"
+               },
+               {
+                    $group: {
+                         _id: "$categories",
+                         recipeCount: { $sum: 1 }
+                    }
+               },
+               {
+                    $sort: { recipeCount: -1 }
+               },
+               {
+                    $limit: limit
+               },
+               {
+                    $project: {
+                         _id: 0,
+                         name: "$_id",
+                         recipeCount: 1,
+                         description: {
+                              $concat: [
+                                   "Explore ",
+                                   { $toString: "$recipeCount" },
+                                   " recipes"
+                              ]
+                         }
+                    }
+               }
+          ]);
+     }
+
+     // category page
+     async getCategoryRow(category, limit = 8) {
+          return Recipe.find(
+               {
+                    isDeleted: false,
+                    categories: category
+               },
+               {
+                    title: 1,
+                    slug: 1,
+                    coverImage: 1,
+                    prepTime: 1,
+                    difficulty: 1,
+                    stats: 1
+               }
+          )
+               .sort({ "stats.favoriteCount": -1 })
+               .limit(limit)
+               .lean();
+     }
+
+     // all recipe page
      async getAllRecipes({
           page = 1,
           limit = 12,
@@ -129,6 +171,8 @@ class RecipeHomepageService {
                }
           }
      }
+
+     // all categories page
      async getAvailableCategories() {
           return Recipe.aggregate([
                {
@@ -169,6 +213,8 @@ class RecipeHomepageService {
                }
           ]);
      }
+
+     // search api
      async getSearchSuggestions(query, limit = 5) {
           if (!query || query.length < 2) return null;
 
@@ -200,44 +246,8 @@ class RecipeHomepageService {
                categories: categories.slice(0, limit)
           };
      }
-     async getCategoryHighlights(limit = 6) {
-          return Recipe.aggregate([
-               {
-                    $match: { isDeleted: false }
-               },
-               {
-                    $unwind: "$categories"
-               },
-               {
-                    $group: {
-                         _id: "$categories",
-                         recipeCount: { $sum: 1 }
-                    }
-               },
-               {
-                    $sort: { recipeCount: -1 }
-               },
-               {
-                    $limit: limit
-               },
-               {
-                    $project: {
-                         _id: 0,
-                         name: "$_id",
-                         recipeCount: 1,
-                         description: {
-                              $concat: [
-                                   "Explore ",
-                                   { $toString: "$recipeCount" },
-                                   " recipes"
-                              ]
-                         }
-                    }
-               }
-          ]);
-     }
-
      
+
 }
 
 export default new RecipeHomepageService();

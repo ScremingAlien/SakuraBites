@@ -16,8 +16,20 @@ router.get('/demo-recipe', recipeController.getDemoRecipe);
 // recipe api for homepage 
 router.get('/most-popular', recipeController.most_popular_recipes);
 router.get('/most-reviewd', recipeController.most_reviewed_recipes);
+router.get('/quick-picks', recipeController.quick_picks);
+router.get('/category-highlight', recipeController.category_highlights);
+
+// all category page
+router.get('/all-category', recipeController.all_categorys);
+
+//category page
+router.get('/category-row', recipeController.category_rows);
+
+// all recipe page
 router.get('/all-recipe', recipeController.all_recipes);
 
+// search api
+router.get('/search', recipeController.search_suggestions);
 
 
 /*------------------------------------
