@@ -1,4 +1,6 @@
 import RecipeService from "./recipe.service.js";
+import CreateRecipeService from './services/recipe.create_recipe.service.js';
+import RecipeHomepageService from './services/recipe.homepage.service.js'
 import { statusCode } from '../../utils/constants/statusCode.js';
 import './recipe.event.js'
 import { Recipe, Ingredient } from '../user/user.model.js'
@@ -7,10 +9,95 @@ import { slugify } from "../../utils/slugify.js";
 export default class RecipeController {
   constructor() {
     this.recipeService = RecipeService;
+    this.createRecipeService = CreateRecipeService;
+    this.recipeHomepageService = RecipeHomepageService
+  }
+  /*------------------------------------
+  Homepage controllers
+  --------------------------------------*/
+  most_popular_recipes = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getMostPopularRecipes();
+      res.success('Get Most Popular Recipes', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  quick_picks = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getQuickPicks();
+      res.success('Get Quick Picks', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+  category_highlights = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getCategoryHighlights();
+      res.success('Get  Category Highlights', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
   }
 
 
+  most_reviewed_recipes = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getMostReviewedRecipes();
+      res.success('Get Most Reviewed Recipes', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
 
+  all_recipes = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getAllRecipes({
+        page: req.query.page || 1,
+        limit: req.query.limit || 12,
+        category: req.query.category || null,
+        difficulty: req.query.difficulty || null,
+        search: req.query.search || null
+      });
+      res.success('Get All Recipes', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  /*------------------------------------
+  Other small pages controllers
+  --------------------------------------*/
+  search_suggestions = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getSearchSuggestions(req.query.q, req.query.limit || 5);
+      res.success('Get Search Suggestions', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+  all_categorys = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getAvailableCategories();
+      res.success('Get All Categories', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  category_rows = async (req, res, next) => {
+    try {
+      let data = await this.recipeHomepageService.getCategoryRow(req.params.category, req.query.limit || 8);
+      res.success('Get Category Rows', data, statusCode.OK);
+    } catch (err) {
+      next(err)
+    }
+  }
+ 
+  /*------------------------------------
+  Recipe controllers
+  --------------------------------------*/
   getRecipeBySlug = async (req, res, next) => {
     try {
       const sl = await Recipe.findOne({ slug: req.params.slug }).lean();
@@ -31,6 +118,10 @@ export default class RecipeController {
     }
   }
 
+
+  /*------------------------------------
+  Ingredient controllers
+  --------------------------------------*/
   getIngredientBySlug = async (req, res, next) => {
     try {
       /** 
@@ -67,8 +158,6 @@ export default class RecipeController {
       next(err)
     }
   }
-
-
 
   getIngredientUsageBySlug = async (req, res, next) => {
     try {
@@ -154,7 +243,7 @@ export default class RecipeController {
        * title, description?, coverImage?, videoUrl?
        */
 
-      let d = await this.recipeService.setMetadata(req.body.title, req.body, req.user._id);
+      let d = await this.createRecipeService.setMetadata(req.body.title, req.body, req.user._id);
       res.success(d.message, d.data, statusCode.OK);
 
     } catch (err) {
@@ -168,7 +257,7 @@ export default class RecipeController {
        * baseServings,prepTime,cookTime,difficulty
        */
       let recipeSlug = req.params.slug;
-      let d = await this.recipeService.setServing(recipeSlug, req.body);
+      let d = await this.createRecipeService.setServing(recipeSlug, req.body);
       res.success(d.message, d.data, statusCode.OK);
 
 
@@ -184,7 +273,7 @@ export default class RecipeController {
        */
       let recipeSlug = req.params.slug;
 
-      let d = await this.recipeService.setIngredients(recipeSlug, req.body);
+      let d = await this.createRecipeService.setIngredients(recipeSlug, req.body);
       res.success(d.message, d.data, statusCode.OK);
 
 
@@ -200,9 +289,9 @@ export default class RecipeController {
        */
       let recipeSlug = req.params.slug;
 
-      let d = await this.recipeService.setSteps(recipeSlug, req.body);
+      let d = await this.createRecipeService.setSteps(recipeSlug, req.body);
       res.success(d.message, d.data, statusCode.OK);
-      
+
 
     } catch (err) {
       next(err)
