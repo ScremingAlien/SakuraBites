@@ -89,9 +89,9 @@ const RecipeSchema = new Schema({
 
      // Scaling Logic
      baseServings: { type: Number, default: 4, required: true },
-     prepTime: { type: Number, index: true }, // in minutes
-     cookTime: { type: Number, index: true }, // in minutes
-     difficulty: { type: String, enum: ['easy', 'medium', 'hard'], index: true },
+     prepTime: { type: Number, index: true, default: 0 }, // in minutes
+     cookTime: { type: Number, index: true, default: 0 }, // in minutes
+     difficulty: { type: String, enum: ['easy', 'medium', 'hard'], index: true, default: 'easy' },
 
      ingredients: [RecipeIngredientSchema],
      instructions: [InstructionSchema],
@@ -115,15 +115,14 @@ const RecipeSchema = new Schema({
           favoriteCount: { type: Number, default: 0 }
      },
 
-     dataComplete: [
-          {
-               initiated: { type: Boolean, default: false },
-               scaling: { type: Boolean, default: false },
-               ingredients: { type: Boolean, default: false },
-               instructions: { type: Boolean, default: false },
-               finialized: { type: Boolean, default: false }
-          }
-     ],
+     dataComplete: {
+          initiated: { type: Boolean, default: false },
+          scaling: { type: Boolean, default: false },
+          ingredients: { type: Boolean, default: false },
+          instructions: { type: Boolean, default: false },
+          finialized: { type: Boolean, default: false }
+     }
+     ,
 
      isDeleted: { type: Boolean, default: false, index: true }
 }, baseOptions)
