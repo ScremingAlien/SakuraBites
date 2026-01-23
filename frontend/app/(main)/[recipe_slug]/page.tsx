@@ -2,9 +2,9 @@
 import RenderMainRecipe from './_component/RenderRecipe/RenderMainRecipe'
 import QuestionAsked from './_component/questions/QuestionAsked'
 import Reviews from './_component/reviews/Reviews'
-import { RecipeResponse } from '@/lib/types'
-import { FETCH } from '@/lib/api'
+ 
 import { Suspense } from 'react'
+import { getRecipeBySlug } from '@/lib/homepage/homepage.api'
 
 /*------------------------------------
 Prop = recipe's slug,
@@ -17,7 +17,7 @@ type Props = {
 export default async function page({ params }: Props) {
   const { recipe_slug } = await params;
 
-  const data_recipe: RecipeResponse = await FETCH.get(`/recipe/${recipe_slug}/by-slug`, { headers: { 'Cache-Control': 'public, s-maxage=60' } }).then(res => res.data)
+  const data_recipe  = await getRecipeBySlug({ slug: recipe_slug });
 
 
   return (

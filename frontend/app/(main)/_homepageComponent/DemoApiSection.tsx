@@ -1,13 +1,12 @@
-import { FETCH } from '@/lib/api'
-import { DemoRecipeResponse } from '@/lib/types'
+import { getDemoRecipe } from '@/lib/homepage/homepage.api'
 import Link from 'next/link'
- 
+
 type Props = {}
 
 export default async function DemoApiSection({ }: Props) {
 
-     const data: DemoRecipeResponse = await FETCH.get('/recipe/demo-recipe').then(res => res.data)
-
+     const data = await getDemoRecipe();
+     
      return (
           <div className=' '>
                <h4>{data.success ? data.message + " fetched succesfully" : "Demo api rendering failed"} </h4>
@@ -22,7 +21,7 @@ export default async function DemoApiSection({ }: Props) {
 
                                         <h6 className=''>{recipe.title}</h6>
                                         <p>Difficulty = {recipe.difficulty}</p>
-                                        <p>Rating = { recipe.categories}</p>
+                                        <p>Rating = {recipe.categories}</p>
                                    </Link>
                               )
                          })
