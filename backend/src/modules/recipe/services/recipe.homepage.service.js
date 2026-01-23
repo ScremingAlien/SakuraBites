@@ -54,7 +54,8 @@ class RecipeHomepageService {
                     slug: 1,
                     coverImage: 1,
                     prepTime: 1,
-                    stats: 1
+                    stats: 1,
+                    difficulty: 1
                }
           )
                .sort({
@@ -100,7 +101,7 @@ class RecipeHomepageService {
                }
           ]);
      }
-
+     
      // category page
      async getCategoryRow(category, limit = 8) {
           return Recipe.find(

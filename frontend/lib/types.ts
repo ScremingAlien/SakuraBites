@@ -16,13 +16,20 @@ type Recipe_d = {
 };
 
 export type Ingredient = {
+     _id: string;
+     name: string;
+     slug: string;
+     nutrientsPer100g?: Nutrients;
+}
+export type IngredientRecipe = {
      ingredientId: string;
      name: string;
      amount: number;
      unit: string;
      isOptional: boolean;
 }
-export type Instructions = {
+
+export type InstructionsRecipe = {
      step: number;
      text: string;
      isHeading: boolean;
@@ -47,14 +54,14 @@ export type User = {
      };
 }
 
-export type Nutrients={
+export type Nutrients = {
      calories: number;
      protein: number;
      carbs: number;
      fat: number;
 }
 
-export type Stats={
+export type Stats = {
      avgRating: number;
      reviewCount: number;
      favoriteCount: number;
@@ -70,8 +77,8 @@ export type Recipe = {
      prepTime: number;
      cookTime: number;
      difficulty: string;
-     ingredients: Array<Ingredient>;
-     instructions: Array<Instructions>;
+     ingredients: Array<IngredientRecipe>;
+     instructions: Array<InstructionsRecipe>;
      categories: string[];
      tags: string[];
      cuisine: string;
@@ -93,7 +100,7 @@ export type Question = {
      upvotes: number;
      createdAt: string;
      updatedAt: string;
-     answer:{
+     answer: {
           answerdAt: string;
           answeredBy: string;
           text: string
@@ -101,7 +108,7 @@ export type Question = {
      v: number;
 }
 
-export type ReviewR={
+export type ReviewR = {
      _id: string;
      recipeId: string;
      userId: string;
@@ -112,7 +119,33 @@ export type ReviewR={
      v: number;
 }
 
-
+type RecipeTypeApi = {
+     _id: string;
+     title: string;
+     slug: string;
+     coverImage: string;
+     difficulty: string;
+     stats: Stats;
+     cookTime?: number;
+     prepTime?: number;
+}
+type CategoryTypeApi = {
+     recipeCount: number;
+     name: string;
+     avgPrepTime: number;
+     description: string;
+}
+type Pagination = {
+     page: number;
+     limit: number;
+     total: number;
+     totalPages: number;
+}
+type SearchResponse = {
+     recipe: Pick<RecipeTypeApi, "_id" | "title" | "slug">[];
+     categories: string[];
+     ingredients: Pick<Ingredient, "name" | "_id" | "slug">[];
+}
 /*------------------------------------
 For api's response
 --------------------------------------*/
@@ -120,3 +153,9 @@ export type DemoRecipeResponse = ApiResponse<Recipe_d[]>
 export type RecipeResponse = ApiResponse<Recipe>
 export type QuestionByRecipeResponse = ApiResponse<Question[]>
 export type ReviewByResponse = ApiResponse<ReviewR[]>
+
+// new apis for homepages and other
+export type RecipeTypeResponse = ApiResponse<RecipeTypeApi[]>
+export type CategoryTypeResponse = ApiResponse<CategoryTypeApi[]>
+export type AllRecipeTypeResponse = ApiResponse<{ data: RecipeTypeApi[], pagination: Pagination }>
+export type SearchTypeResponse = ApiResponse<SearchResponse>

@@ -1,4 +1,5 @@
 import DemoApiSection from "./_homepageComponent/DemoApiSection";
+import QuickPicksSection from "./_homepageComponent/QuickPicksSection";
 
 /*------------------------------------
 Homepage should include
@@ -11,8 +12,8 @@ export default function page() {
      return (
           <section className=' py-16'>
 
-               <DemoApiSection/>
-               
+               <DemoApiSection />
+               <QuickPicksSection />
           </section>
      )
 }

@@ -88,7 +88,7 @@ export default class RecipeController {
 
   category_rows = async (req, res, next) => {
     try {
-      let data = await this.recipeHomepageService.getCategoryRow(req.params.category, req.query.limit || 8);
+      let data = await this.recipeHomepageService.getCategoryRow(req.query.category, req.query.limit || 8);
       res.success('Get Category Rows', data, statusCode.OK);
     } catch (err) {
       next(err)
